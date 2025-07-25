@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Env
+.env
+.env.*
+
+# SQLite DB
+trip_snatchers.db
+
+# VSCode
+.vscode/
+
+# PyCharm/JetBrains
+.idea/
+
+# Logs
+*.log
+
+# Misc
+*.swp 
