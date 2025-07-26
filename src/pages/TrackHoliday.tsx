@@ -7,7 +7,7 @@ import { Label } from '../components/ui/label';
 import { Checkbox } from '../components/ui/checkbox';
 import { toast } from '@/hooks/use-toast';
 import { holidayApi } from '../api/holidays';
-import { Link2, DollarSign, Bell, Info } from 'lucide-react';
+import { Link2, Coins, Bell, Info } from 'lucide-react';
 
 interface TrackHolidayProps {
   initialPrice?: number;
@@ -103,9 +103,9 @@ const TrackHoliday = ({ initialPrice }: TrackHolidayProps) => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="targetPrice">Target Price (€)</Label>
+                <Label htmlFor="targetPrice">Target Price </Label>
                 <div className="relative">
-                  <DollarSign className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Coins className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="targetPrice"
                     type="number"
@@ -125,7 +125,7 @@ const TrackHoliday = ({ initialPrice }: TrackHolidayProps) => {
 
               {initialPrice && (
                 <div className="p-4 bg-muted rounded-lg">
-                  <p className="text-sm font-medium">Current Price: €{initialPrice}</p>
+                  <p className="text-sm font-medium">Current Price: {initialPrice.toLocaleString()}</p>
                   <p className="text-xs text-muted-foreground mt-1">
                     This price was fetched from your scraping script
                   </p>

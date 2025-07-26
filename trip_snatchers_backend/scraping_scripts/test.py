@@ -113,30 +113,49 @@ class FixedHolidayPriceScraper:
             return False
 
     def _convert_currency(self, price_text, currency='GBP'):
-        """Convert prices to GBP if needed"""
+        """Extract price value and identify currency"""
         if not price_text:
-            return None
+            return None, None
         
         # Extract numeric value
         numeric_match = re.search(r'[\d,]+\.?\d*', price_text.replace(',', ''))
         if not numeric_match:
-            return None
+            return None, None
         
         try:
             price_value = float(numeric_match.group().replace(',', ''))
             
-            # Convert PKR to GBP
+            # Identify currency
             if 'Rs' in price_text or 'PKR' in price_text or currency == 'PKR':
-                price_value = price_value * self.PKR_TO_GBP
-                return f"£{price_value:,.2f}"
+                return price_value, 'PKR'
             elif '£' in price_text or 'GBP' in price_text or currency == 'GBP':
-                return f"£{price_value:,.2f}"
+                return price_value, 'GBP'
             else:
                 # Assume GBP if no currency specified
-                return f"£{price_value:,.2f}"
+                return price_value, 'GBP'
         
         except ValueError:
+            return None, None
+            
+    def _standardize_price(self, price_value, currency):
+        """Standardize price for storage"""
+        if price_value is None or currency is None:
             return None
+            
+        # Create a standardized price object
+        price_data = {
+            'value': price_value,
+            'currency': currency,
+            'original_value': price_value
+        }
+        
+        # Convert to GBP if needed
+        if currency == 'PKR':
+            price_data['gbp_value'] = price_value * self.PKR_TO_GBP
+        else:
+            price_data['gbp_value'] = price_value
+            
+        return price_data
 
     def _save_result_immediately(self, result, output_file):
         """Save individual result immediately to CSV"""

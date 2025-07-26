@@ -37,8 +37,8 @@ const SnatchedDeals = () => {
     }
   };
 
-  const getSavingsPercentage = (original: number, snatched: number) => {
-    return Math.round(((original - snatched) / original) * 100);
+  const getSavingsPercentage = (target: number, snatched: number) => {
+    return Math.round(((target - snatched) / target) * 100);
   };
 
   const getCategoryEmoji = (savings: number) => {
@@ -59,9 +59,9 @@ const SnatchedDeals = () => {
     );
   }
 
-  const totalSavings = deals.reduce((sum, deal) => sum + (deal.initial_price - deal.snatched_price), 0);
+  const totalSavings = deals.reduce((sum, deal) => sum + (deal.target_price - deal.snatched_price), 0);
   const averageSavings = deals.length > 0 
-    ? Math.round(deals.reduce((sum, deal) => sum + getSavingsPercentage(deal.initial_price, deal.snatched_price), 0) / deals.length)
+    ? Math.round(deals.reduce((sum, deal) => sum + getSavingsPercentage(deal.target_price, deal.snatched_price), 0) / deals.length)
     : 0;
 
   return (
@@ -86,7 +86,7 @@ const SnatchedDeals = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
             <div>
               <div className="text-3xl font-bold text-primary-foreground mb-1">
-                €{totalSavings.toLocaleString()}
+                {totalSavings.toLocaleString()}
               </div>
               <div className="text-primary-foreground/80">Total Community Savings</div>
             </div>
@@ -108,7 +108,7 @@ const SnatchedDeals = () => {
         {/* Deals Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {deals.map((deal) => {
-            const savings = deal.initial_price - deal.snatched_price;
+            const savings = deal.target_price - deal.snatched_price;
             return (
               <Card 
                 key={deal.id} 
@@ -121,7 +121,7 @@ const SnatchedDeals = () => {
                       <div className="text-5xl">{getCategoryEmoji(savings)}</div>
                       <Badge className="bg-gradient-success text-accent-foreground shadow-deal">
                         <Sparkles className="h-3 w-3 mr-1" />
-                        {getSavingsPercentage(deal.initial_price, deal.snatched_price)}% OFF
+                        {getSavingsPercentage(deal.target_price, deal.snatched_price)}% OFF
                       </Badge>
                     </div>
                     
@@ -139,25 +139,24 @@ const SnatchedDeals = () => {
                   <div className="p-6">
                     <div className="space-y-3">
                       <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">Original Price:</span>
-                        <span className="line-through text-muted-foreground font-semibold">
-                          €{deal.initial_price}
+                        <span className="text-muted-foreground">Target Price:</span>
+                        <span className="text-muted-foreground font-semibold">
+                          {deal.target_price.toLocaleString()}
                         </span>
                       </div>
                       
                       <div className="flex justify-between items-center">
                         <span className="text-muted-foreground">Snatched Price:</span>
                         <span className="font-bold text-2xl text-accent">
-                          €{deal.snatched_price}
+                          {deal.snatched_price.toLocaleString()}
                         </span>
                       </div>
                       
                       <div className="flex justify-between items-center py-2 px-3 bg-gradient-success rounded-lg">
                         <span className="text-accent-foreground font-medium">You Save:</span>
                         <div className="flex items-center space-x-1">
-                          <DollarSign className="h-4 w-4 text-accent-foreground" />
                           <span className="font-bold text-xl text-accent-foreground">
-                            €{savings}
+                            {savings.toLocaleString()}
                           </span>
                         </div>
                       </div>

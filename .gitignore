@@ -35,3 +35,29 @@ trip_snatchers_backend/trip_snatchers.db
 *.log
 .idea/
 *.swp
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Env
+.env
+.env.*
+env
+
+# SQLite DB
+trip_snatchers.db
+
+# VSCode
+.vscode/
+
+# PyCharm/JetBrains
+.idea/
+
+# Logs
+*.log
+
+# Misc
+*.swp 

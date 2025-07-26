@@ -1,0 +1,2 @@
+from scraping_scripts.scraper import update_all_tracked_holiday_prices 
+update_all_tracked_holiday_prices()

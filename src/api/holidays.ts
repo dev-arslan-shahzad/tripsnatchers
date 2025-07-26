@@ -31,7 +31,7 @@ export const holidayApi = {
 
   // Stop tracking a holiday
   stopTracking: async (id: number): Promise<void> => {
-    await client.delete(`/holidays/tracked/${id}`);
+    await client.delete(`/holidays/${id}`);
   },
 
   // Update target price for a tracked holiday

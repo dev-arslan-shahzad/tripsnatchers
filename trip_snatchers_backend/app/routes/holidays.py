@@ -1,12 +1,14 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from typing import List
 
 from .. import crud, models, schemas
 from ..database import get_db
 from .auth import get_current_user
-from ..scheduler import scrape_holiday_price
+# from ..scheduler import scrape_holiday_price  # Removed, no longer needed
 import asyncio
+from scraping_scripts.scraper import update_all_tracked_holiday_prices, scrape_and_update_single_holiday
+import threading
 
 router = APIRouter(
     prefix="/holidays",
@@ -19,11 +21,14 @@ async def track_holiday(
     current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    return crud.create_holiday_track(
+    new_holiday = crud.create_holiday_track(
         db=db,
         holiday=holiday,
         user_id=current_user.id
     )
+    # Start a background thread to scrape and update this holiday's price
+    threading.Thread(target=scrape_and_update_single_holiday, args=(new_holiday.id,), daemon=True).start()
+    return new_holiday
 
 @router.post("/update-price/{holiday_id}", response_model=schemas.HolidayTrack)
 async def update_holiday_price(
@@ -45,6 +50,13 @@ async def update_holiday_price(
     
     # Check if target price is met
     if current_price <= holiday.target_price:
+        # Send email alert to user
+        from ..email_utils import send_price_alert
+        send_price_alert(
+            user_email=current_user.email,
+            holiday_url=holiday.holiday_url,
+            target_price=current_price
+        )
         crud.create_snatched_deal(
             db=db,
             user_id=current_user.id,
@@ -86,3 +98,20 @@ async def delete_holiday(
     if crud.delete_holiday_track(db, holiday_id=holiday_id, user_id=current_user.id):
         return {"message": "Holiday tracking removed successfully"}
     raise HTTPException(status_code=404, detail="Holiday not found") 
+
+@router.post("/update-all-prices")
+def update_all_prices(current_user: models.User = Depends(get_current_user)):
+    """
+    Endpoint to trigger Selenium price update for all holidays in the DB.
+    Any authenticated user can trigger this.
+    """
+    update_all_tracked_holiday_prices()
+    return {"message": "Triggered price update for all holidays."} 
+
+@router.post("/internal/update-all-prices")
+async def internal_update_all_prices(request: Request):
+    # Only allow requests from localhost
+    if request.client.host != "127.0.0.1":
+        raise HTTPException(status_code=403, detail="Forbidden: Only allowed from backend/localhost")
+    update_all_tracked_holiday_prices()
+    return {"message": "Triggered price update for all holidays."} 

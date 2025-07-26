@@ -7,16 +7,19 @@ import { useAuth } from '../context/AuthContext';
 import { holidayApi, type HolidayTrack } from '../api/holidays';
 import { toast } from '@/hooks/use-toast';
 import { Plus, Trash2, ExternalLink, TrendingDown, TrendingUp, DollarSign, Calendar, MapPin, Bell } from 'lucide-react';
+import client from '../api/client';
 
 const Dashboard = () => {
   const { user } = useAuth();
   const [holidays, setHolidays] = useState<HolidayTrack[]>([]);
+  const [snatchedDeals, setSnatchedDeals] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     console.log('Dashboard mounted, user:', user);
     fetchHolidays();
+    fetchSnatchedDeals();
   }, []);
 
   const fetchHolidays = async () => {
@@ -36,6 +39,15 @@ const Dashboard = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchSnatchedDeals = async () => {
+    try {
+      const response = await client.get('/snatched/my');
+      setSnatchedDeals(response.data);
+    } catch (error) {
+      console.error('Failed to fetch snatched deals:', error);
     }
   };
 
@@ -148,7 +160,7 @@ const Dashboard = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-foreground">
-                    {holidays.filter(h => h.is_active).length}
+                    {holidays.length}
                   </p>
                   <p className="text-sm text-muted-foreground">Active Tracks</p>
                 </div>
@@ -164,7 +176,7 @@ const Dashboard = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-foreground">
-                    {holidays.filter(h => !h.is_active).length}
+                    {snatchedDeals.length}
                   </p>
                   <p className="text-sm text-muted-foreground">Deals Snatched</p>
                 </div>
@@ -180,8 +192,7 @@ const Dashboard = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-foreground">
-                    €{holidays.filter(h => !h.is_active)
-                              .reduce((sum, h) => sum + (h.current_price - h.target_price), 0).toFixed(2)}
+                    {snatchedDeals.reduce((sum, d) => sum + (d.initial_price - d.snatched_price), 0).toFixed(2)}
                   </p>
                   <p className="text-sm text-muted-foreground">Total Saved</p>
                 </div>
@@ -235,7 +246,7 @@ const Dashboard = () => {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
                           <div>
                             <p className="text-sm text-muted-foreground">Target Price</p>
-                            <p className="font-semibold text-foreground">€{holiday.target_price}</p>
+                            <p className="font-semibold text-foreground">{holiday.target_price}</p>
                           </div>
                           <div>
                             <p className="text-sm text-muted-foreground">Current Price</p>
@@ -245,7 +256,7 @@ const Dashboard = () => {
                                   ? 'text-accent animate-price-drop' 
                                   : 'text-foreground'
                               }`}>
-                                €{holiday.current_price}
+                                {holiday.current_price}
                               </p>
                               {getPriceIndicator(holiday)}
                             </div>

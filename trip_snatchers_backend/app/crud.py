@@ -96,7 +96,7 @@ def create_holiday_track(
 
 def get_user_holiday_tracks(db: Session, user_id: int, skip: int = 0, limit: int = 100):
     return db.query(models.HolidayTrack)\
-        .filter(models.HolidayTrack.user_id == user_id)\
+        .filter(models.HolidayTrack.user_id == user_id, models.HolidayTrack.is_active == True)\
         .offset(skip).limit(limit).all()
 
 def get_holiday_track(db: Session, holiday_id: int, user_id: int):
