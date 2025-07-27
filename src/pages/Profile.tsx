@@ -314,7 +314,7 @@ const Profile = () => {
             <CardContent className="pt-6">
               <div className="text-center">
                 <div className="text-3xl font-bold text-accent mb-2">
-                  €{stats.total_savings.toLocaleString()}
+                  {stats.total_savings.toLocaleString()}
                 </div>
                 <div className="text-sm text-muted-foreground">Total Savings</div>
               </div>

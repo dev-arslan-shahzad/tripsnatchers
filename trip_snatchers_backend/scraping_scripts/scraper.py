@@ -22,8 +22,8 @@ def scrape_and_update_single_holiday(holiday_id: int):
             logger.warning(f"Holiday with ID {holiday_id} not found.")
             return
         logger.info(f"Scraping price for new holiday: {holiday.url}")
-        price_str = scraper._scrape_price(holiday.url)
-        logger.info(f"Scraped price: {price_str}")
+        price_str, date_str = scraper._scrape_price_and_date(holiday.url)
+        logger.info(f"Scraped price: {price_str}, date: {date_str}")
         numeric_price = None
         if price_str and isinstance(price_str, str):
             import re
