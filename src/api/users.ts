@@ -5,7 +5,7 @@ export interface UserUpdateData {
   last_name?: string;
   phone?: string;
   country?: string;
-  age?: number;
+  date_of_birth?: string;
   gender?: string;
 }
 

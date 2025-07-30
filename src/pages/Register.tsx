@@ -20,7 +20,7 @@ const Register = () => {
     password: '',
     confirmPassword: '',
     country: '',
-    age: undefined,
+    date_of_birth: undefined,
     gender: undefined
   });
   const [loading, setLoading] = useState(false);
@@ -305,15 +305,13 @@ const Register = () => {
               {/* Optional Fields */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="age">Age (Optional)</Label>
+                  <Label htmlFor="date_of_birth">Date of Birth (Optional)</Label>
                   <Input
-                    id="age"
-                    type="number"
-                    placeholder="25"
-                    value={formData.age || ''}
-                    onChange={(e) => handleChange('age', e.target.value ? parseInt(e.target.value) : undefined)}
-                    min="18"
-                    max="120"
+                    id="date_of_birth"
+                    type="date"
+                    value={formData.date_of_birth || ''}
+                    onChange={(e) => handleChange('date_of_birth', e.target.value || undefined)}
+                    max={new Date().toISOString().split('T')[0]}
                   />
                 </div>
 

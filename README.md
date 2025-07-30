@@ -1,73 +1,138 @@
-# Welcome to your Lovable project
+# TripSnatchers
 
-## Project info
+TripSnatchers is a web application designed to help users find and track the best holiday deals. The application monitors holiday packages and notifies users when prices drop or when deals matching their preferences become available.
 
-**URL**: https://lovable.dev/projects/ca63aee4-923b-4f29-b7ae-88d7bf3bb6e6
+## Features
 
-## How can I edit this code?
+- 📱 Responsive design that works on desktop and mobile
+- 🔐 Secure user authentication system
+- ✉️ Email verification system
+- 📊 Interactive dashboard for tracking holiday deals
+- 🏖️ Holiday package tracking
+- 📉 Price drop notifications
+- 👥 User profile management
+- 🔍 Compatible sites monitoring
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+### Frontend
+- React + Vite
+- TypeScript
+- Tailwind CSS
+- Shadcn/ui components
+- React Hook Form
+- React Router
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/ca63aee4-923b-4f29-b7ae-88d7bf3bb6e6) and start prompting.
+### Backend
+- FastAPI (Python)
+- SQLAlchemy
+- Alembic for database migrations
+- SQLite database
+- Background task scheduling
 
-Changes made via Lovable will be committed automatically to this repo.
+## Getting Started
 
-**Use your preferred IDE**
+### Prerequisites
+- Node.js (v16 or higher)
+- Python 3.12 or higher
+- Git
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Frontend Setup
+1. Clone the repository:
+```bash
+git clone https://github.com/dev-arslan-shahzad/tripsnatchers.git
+cd tripsnatchers
+```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+2. Install dependencies:
+```bash
+npm install
+```
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+3. Start the development server:
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Backend Setup
+1. Navigate to the backend directory:
+```bash
+cd trip_snatchers_backend
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+2. Create and activate a virtual environment:
+```bash
+python -m venv env
+# On Windows
+.\env\Scripts\activate
+# On Unix or MacOS
+source env/bin/activate
+```
 
-**Use GitHub Codespaces**
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+4. Run database migrations:
+```bash
+alembic upgrade head
+```
 
-## What technologies are used for this project?
+5. Start the backend server:
+```bash
+uvicorn app.main:app --reload
+```
 
-This project is built with:
+## Project Structure
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```
+tripsnatchers/
+├── src/                    # Frontend source code
+│   ├── api/               # API client functions
+│   ├── components/        # React components
+│   ├── context/          # React context providers
+│   ├── hooks/            # Custom React hooks
+│   ├── lib/              # Utility functions
+│   └── pages/            # Page components
+├── trip_snatchers_backend/  # Backend code
+│   ├── app/              # Main application code
+│   ├── alembic/          # Database migrations
+│   └── scraping_scripts/ # Web scraping utilities
+```
 
-## How can I deploy this project?
+## Features in Detail
 
-Simply open [Lovable](https://lovable.dev/projects/ca63aee4-923b-4f29-b7ae-88d7bf3bb6e6) and click on Share -> Publish.
+### User Authentication
+- Secure signup and login system
+- Email verification
+- Password recovery
 
-## Can I connect a custom domain to my Lovable project?
+### Holiday Tracking
+- Track multiple holiday packages
+- Set price alerts
+- View price history
+- Receive notifications for price drops
 
-Yes, you can!
+### Dashboard
+- Overview of tracked holidays
+- Price trends and analytics
+- Deal recommendations
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Contributing
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License.
+
+## Acknowledgments
+
+- Built with [Shadcn/ui](https://ui.shadcn.com/)
+- Uses [FastAPI](https://fastapi.tiangolo.com/) for the backend
+- Powered by [React](https://reactjs.org/) and [Vite](https://vitejs.dev/)

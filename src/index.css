@@ -2,6 +2,68 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Loading Screen Animation */
+#loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #2D8A67;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease-out;
+}
+
+.loading-spinner {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-spinner::before,
+.loading-spinner::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+.loading-spinner::before {
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.15);
+  animation-delay: -0.5s;
+}
+
+.loading-spinner::after {
+  width: 60%;
+  height: 60%;
+  background: rgba(255, 255, 255, 0.35);
+  animation-delay: 0s;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+#loading-screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* Trip Snatchers Design System - Travel & Deal Hunting Theme */
 
 @layer base {
@@ -16,10 +78,10 @@
     --popover: 0 0% 100%;
     --popover-foreground: 215 25% 15%;
 
-    /* Ocean Blue Primary */
-    --primary: 210 85% 35%;
+    /* Mint Green Primary */
+    --primary: 150 60% 40%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 210 85% 50%;
+    --primary-glow: 150 60% 55%;
 
     /* Sky Secondary */
     --secondary: 200 50% 95%;
@@ -28,8 +90,8 @@
     --muted: 200 30% 94%;
     --muted-foreground: 215 15% 50%;
 
-    /* Deal Success Green */
-    --accent: 150 75% 40%;
+    /* Lighter Mint Green Accent */
+    --accent: 150 70% 45%;
     --accent-foreground: 0 0% 100%;
 
     /* Deal Alert Orange */
@@ -44,7 +106,7 @@
     --ring: 210 85% 35%;
 
     /* Gradients */
-    --gradient-ocean: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-ocean: linear-gradient(135deg, hsl(var(--primary)), hsl(150 65% 50%));
     --gradient-sky: linear-gradient(180deg, hsl(200 100% 95%), hsl(210 100% 98%));
     --gradient-sunset: linear-gradient(45deg, hsl(var(--warning)), hsl(15 100% 60%));
     --gradient-success: linear-gradient(135deg, hsl(var(--accent)), hsl(160 70% 45%));

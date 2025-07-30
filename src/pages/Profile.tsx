@@ -25,7 +25,7 @@ const Profile = () => {
     email: '',
     phone: '',
     country: '',
-    age: '',
+    date_of_birth: '',
     gender: ''
   });
 
@@ -37,7 +37,7 @@ const Profile = () => {
         email: user.email || '',
         phone: user.phone || '',
         country: user.country || '',
-        age: user.age?.toString() || '',
+        date_of_birth: user.date_of_birth || '',
         gender: user.gender || ''
       });
       fetchUserStats();
@@ -67,7 +67,7 @@ const Profile = () => {
         last_name: formData.last_name,
         phone: formData.phone,
         country: formData.country,
-        age: formData.age ? parseInt(formData.age) : undefined,
+        date_of_birth: formData.date_of_birth || undefined,
         gender: formData.gender || undefined
       };
 
@@ -97,7 +97,7 @@ const Profile = () => {
         email: user.email || '',
         phone: user.phone || '',
         country: user.country || '',
-        age: user.age?.toString() || '',
+        date_of_birth: user.date_of_birth || '',
         gender: user.gender || ''
       });
     }
@@ -236,17 +236,16 @@ const Profile = () => {
                 </div>
               </div>
 
-              {/* Age and Gender */}
+              {/* Date of Birth and Gender */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="age">Age</Label>
+                  <Label htmlFor="date_of_birth">Date of Birth</Label>
                   <Input
-                    id="age"
-                    type="number"
-                    value={formData.age}
-                    onChange={(e) => handleChange('age', e.target.value)}
-                    min="18"
-                    max="120"
+                    id="date_of_birth"
+                    type="date"
+                    value={formData.date_of_birth ? new Date(formData.date_of_birth).toISOString().split('T')[0] : ''}
+                    onChange={(e) => handleChange('date_of_birth', e.target.value)}
+                    max={new Date().toISOString().split('T')[0]}
                     disabled={!editing}
                   />
                 </div>

@@ -23,7 +23,7 @@ def create_user(
         email=user.email,
         phone=user.phone,
         country=user.country,
-        age=user.age,
+        date_of_birth=user.date_of_birth,
         gender=user.gender,
         hashed_password=hashed_password,
         verification_token=verification_token,

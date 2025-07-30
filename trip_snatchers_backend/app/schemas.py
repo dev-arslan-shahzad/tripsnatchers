@@ -8,7 +8,7 @@ class UserBase(BaseModel):
     email: EmailStr
     phone: str
     country: str
-    age: Optional[int] = None
+    date_of_birth: Optional[datetime] = None
     gender: Optional[str] = None
 
 class UserCreate(UserBase):
@@ -19,7 +19,7 @@ class UserUpdate(BaseModel):
     last_name: Optional[str] = None
     phone: Optional[str] = None
     country: Optional[str] = None
-    age: Optional[int] = None
+    date_of_birth: Optional[datetime] = None
     gender: Optional[str] = None
 
 class User(UserBase):

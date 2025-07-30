@@ -12,7 +12,7 @@ export interface RegisterData {
   phone: string;
   country: string;
   password: string;
-  age?: number;
+  date_of_birth?: string;
   gender?: string;
 }
 

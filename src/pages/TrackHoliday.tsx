@@ -8,6 +8,7 @@ import { Checkbox } from '../components/ui/checkbox';
 import { toast } from '@/hooks/use-toast';
 import { holidayApi } from '../api/holidays';
 import { Link2, Coins, Bell, Info } from 'lucide-react';
+import { CompatibleSites } from '../components/CompatibleSites';
 
 interface TrackHolidayProps {
   initialPrice?: number;
@@ -84,13 +85,16 @@ const TrackHoliday = ({ initialPrice }: TrackHolidayProps) => {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="url">Holiday URL</Label>
+                <div className="flex items-center justify-between mb-2">
+                  <Label htmlFor="url">Holiday URL</Label>
+                  <CompatibleSites />
+                </div>
                 <div className="relative">
                   <Link2 className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="url"
                     type="url"
-                    placeholder="https://example.com/holiday-package"
+                    placeholder="Paste a URL from one of our compatible holiday sites"
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
                     className="pl-10"
@@ -119,7 +123,7 @@ const TrackHoliday = ({ initialPrice }: TrackHolidayProps) => {
                   />
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  We'll alert you when the price drops to this amount or below
+                  We'll alert you when the package price drops to this amount or below
                 </p>
               </div>
 
@@ -174,7 +178,7 @@ const TrackHoliday = ({ initialPrice }: TrackHolidayProps) => {
               <div className="space-y-2">
                 <h3 className="font-semibold text-foreground">How it works</h3>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• We check your holiday price every hour</li>
+                  <li>• We check your holiday price every 6 hours</li>
                   <li>• You'll get email alerts when prices drop</li>
                   <li>• Track up to 5 holidays on the free plan</li>
                   <li>• Cancel tracking anytime from your dashboard</li>

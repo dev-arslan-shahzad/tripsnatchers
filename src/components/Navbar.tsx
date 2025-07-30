@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Button } from './ui/button';
 import { Plane, User, LogOut, TrendingDown } from 'lucide-react';
+import { CompatibleSites } from './CompatibleSites';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -35,6 +36,7 @@ const Navbar = () => {
               <TrendingDown className="h-4 w-4" />
               <span>Snatched Deals</span>
             </Link>
+            <CompatibleSites />
             
             {user ? (
               <>

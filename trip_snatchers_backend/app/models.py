@@ -13,7 +13,7 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     phone = Column(String)
     country = Column(String)
-    age = Column(Integer, nullable=True)
+    date_of_birth = Column(DateTime, nullable=True)
     gender = Column(String, nullable=True)
     hashed_password = Column(String)
     is_verified = Column(Boolean, default=False)

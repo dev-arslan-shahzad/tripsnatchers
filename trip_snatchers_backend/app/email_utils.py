@@ -17,14 +17,30 @@ FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:8080")  # Default to 
 
 def send_email(to_email: str, subject: str, body: str) -> bool:
     """
-    Generic function to send emails
+    Generic function to send emails with improved deliverability
     """
-    msg = MIMEMultipart()
-    msg['From'] = FROM_EMAIL
+    msg = MIMEMultipart('alternative')
+    
+    # Format From header with display name for better deliverability
+    from_name = "Trip Snatchers"
+    msg['From'] = f"{from_name} <{FROM_EMAIL}>"
     msg['To'] = to_email
     msg['Subject'] = subject
-
-    msg.attach(MIMEText(body, 'html'))
+    
+    # Add headers to improve deliverability
+    msg['Message-ID'] = f"<{secrets.token_hex(16)}@tripsnatchers.com>"
+    msg['Date'] = datetime.now().strftime("%a, %d %b %Y %H:%M:%S %z")
+    msg['List-Unsubscribe'] = f"<mailto:{FROM_EMAIL}?subject=unsubscribe>"
+    msg['Precedence'] = 'bulk'
+    msg['X-Mailer'] = 'Trip Snatchers Mailer 1.0'
+    
+    # Add plain text version first (important for spam filters)
+    plain_text = body.replace('<br>', '\n').replace('<p>', '\n').replace('</p>', '\n')
+    plain_text = ' '.join(plain_text.split())  # Normalize whitespace
+    msg.attach(MIMEText(plain_text, 'plain', 'utf-8'))
+    
+    # Add HTML version
+    msg.attach(MIMEText(body, 'html', 'utf-8'))
 
     try:
         server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
@@ -46,24 +62,40 @@ def send_verification_email(user_email: str, token: str) -> bool:
     
     subject = "Verify Your Trip Snatchers Account"
     body = f"""
-    <html>
-    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-        <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-            <h2 style="color: #0066cc;">Welcome to Trip Snatchers! ✈️</h2>
-            <p>Thank you for registering. Please verify your email address to start tracking holiday deals.</p>
-            <p>Click the button below to verify your email:</p>
-            <p style="text-align: center;">
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0;">
+        <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff;">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h2 style="color: #2D8A67; margin: 0;">Welcome to Trip Snatchers! ✈️</h2>
+            </div>
+            <p style="margin: 16px 0;">Hi there,</p>
+            <p style="margin: 16px 0;">Thank you for registering with Trip Snatchers. To ensure the security of your account and start tracking amazing holiday deals, please verify your email address.</p>
+            <div style="text-align: center; margin: 30px 0;">
                 <a href="{verification_link}" 
-                   style="background-color: #0066cc; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: bold;">
+                   style="background-color: #2D8A67; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: bold;">
                     Verify Email
                 </a>
-            </p>
-            <p>Or copy and paste this link in your browser:</p>
-            <p style="background-color: #f5f5f5; padding: 10px; border-radius: 4px; word-break: break-all;">
+            </div>
+            <p style="margin: 16px 0;">If the button doesn't work, you can copy and paste this link into your browser:</p>
+            <p style="background-color: #f5f5f5; padding: 10px; border-radius: 4px; word-break: break-all; margin: 16px 0;">
                 {verification_link}
             </p>
-            <p><strong>Note:</strong> This link will expire in 24 hours.</p>
-            <p style="color: #666; font-size: 0.9em;">If you didn't create an account with Trip Snatchers, please ignore this email.</p>
+            <p style="margin: 16px 0;"><strong>Note:</strong> This link will expire in 24 hours for security reasons.</p>
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+                <p style="color: #666; font-size: 0.9em; margin: 8px 0;">If you didn't create an account with Trip Snatchers, please ignore this email.</p>
+                <p style="color: #666; font-size: 0.9em; margin: 8px 0;">
+                    © 2025 Trip Snatchers. All rights reserved.<br>
+                    You received this email because you signed up for Trip Snatchers.
+                </p>
+                <p style="color: #666; font-size: 0.9em; margin: 8px 0;">
+                    To unsubscribe from these emails, <a href="mailto:{FROM_EMAIL}?subject=unsubscribe" style="color: #2D8A67;">click here</a>
+                </p>
+            </div>
         </div>
     </body>
     </html>
@@ -98,11 +130,11 @@ def send_price_alert(user_email: str, holiday_url: str, target_price: float) -> 
     <html>
     <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
         <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-            <h2 style="color: #0066cc;">Great news! 🎉</h2>
+            <h2 style="color: #2D8A67;">Great news! 🎉</h2>
             <p>Your tracked holiday has reached your target price of €{target_price}!</p>
             <p style="text-align: center;">
                 <a href="{holiday_url}" 
-                   style="background-color: #0066cc; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: bold;">
+                   style="background-color: #2D8A67; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: bold;">
                     View Holiday Deal
                 </a>
             </p>
